@@ -9,19 +9,19 @@ NORMAL, BLOCKED, HOTSPOT, HOME = 0, 1, 2, 3
 
 class GridWorld:
     def __init__(self, blocked_cells=None):
-        self.rows, self.cols = 10, 10
-        self.grid = np.zeros((10, 10), dtype=int)
-        self.hotspot_cells = [(0, 1), (0, 6), (2, 0), (9, 2), (4, 3), (6, 5)]
+        self.rows, self.cols = 5, 5
+        self.grid = np.zeros((5, 5), dtype=int)
+        self.hotspot_cells = [(0, 1), (0, 4), (2, 0), (4, 2)]
         for r, c in self.hotspot_cells: self.grid[r][c] = HOTSPOT
-        self.home_cells = [(3, 9), (6, 2), (7, 4), (9, 8), (1, 8), (5, 0)]
+        self.home_cells = [(3, 4), (4, 4), (1, 4), (3, 0)]
         for r, c in self.home_cells: self.grid[r][c] = HOME
-        self.blocked_cells = blocked_cells if blocked_cells else [(0,3), (1,2), (2,4), (3,1), (4,5), (5,7), (7,1), (8,3)]
+        self.blocked_cells = blocked_cells if blocked_cells else [(0, 2), (1, 1), (2, 3), (3, 2), (4, 1)]
         for r, c in self.blocked_cells: self.grid[r][c] = BLOCKED
     def get_neighbours(self, r, c):
         res = []
         for dr, dc in [(-1,0),(1,0),(0,1),(0,-1)]:
             nr, nc = r+dr, c+dc
-            if 0<=nr<10 and 0<=nc<10 and self.grid[nr][nc] != BLOCKED: res.append((nr,nc))
+            if 0<=nr<5 and 0<=nc<5 and self.grid[nr][nc] != BLOCKED: res.append((nr,nc))
         return res
 
 class Passenger:
@@ -40,7 +40,7 @@ class TaxiAgent:
     def pickup(self, p):
         self.available = False
         if p.is_drunk: self.score -= 2; self.steps += 2
-        return 5 if p.location in [(0,1),(0,6),(2,0),(9,2),(4,3),(6,5)] else 0
+        return 5 if p.location in [(0, 1), (0, 4), (2, 0), (4, 2)] else 0
     def dropoff(self):
         self.score += 20
         self.available = True
@@ -60,8 +60,13 @@ def astar(w, s, g):
 
 def run_mas():
     w = GridWorld()
-    agents = [TaxiAgent(1, (0,0)), TaxiAgent(2, (9,9))]
-    passengers = [Passenger((0,1),(3,9)), Passenger((9,2),(7,4)), Passenger((2,0),(6,2)), Passenger((6,5),(5,0))]
+    agents = [TaxiAgent(1, (0,0)), TaxiAgent(2, (4,4))]
+    passengers = [
+        Passenger((0,1),(3,4)), 
+        Passenger((4,2),(1,4)), 
+        Passenger((2,0),(3,0)), 
+        Passenger((0,4),(4,4))
+    ]
     active = []
     
     while passengers or active:

@@ -15,7 +15,7 @@ This case study analysis focuses on the design, implementation, and evaluation o
 
 ## 2. Scenario and Environment Model
 ### 2.1 The Grid-London Environment
-The environment is modelled as a 10×10 discrete grid representing a simplified map of central London during peak night hours (Friday and Saturday, 22:00–04:00). Each cell $(r, c)$ represents a specific location. The environment is classified as:
+The environment is modelled as a **5×5 discrete grid** representing a simplified map of central London during peak night hours (Friday and Saturday, 22:00–04:00). Each cell $(r, c)$ represents a specific location. The environment is classified as:
 - **Partially Observable:** The agents know the environment map but only perceive passenger details upon assignment.
 - **Stochastic:** Passenger spawn locations and sobriety status are determined by probabilistic distributions.
 - **Sequential:** Current actions (e.g., fuel spent) impact the total utility of the session.
@@ -30,7 +30,7 @@ The grid contains four cell types:
 4. **Home Zones (3):** Residential drop-off points like Islington, Hackney, and Clapham.
 
 ![FIGURE 1 — Wireframe: Night Economy Taxi Agent Interface](file:///Users/mqc/Desktop/AI%20COURSE%20WORK%20/assets/wireframe.png)
-*Figure 1: Wireframe depicting the structural layout of the Night Economy Taxi Agent interface, including the 10x10 Grid-London map, scenario controls, and live step log.*
+*Figure 1: Wireframe depicting the structural layout of the Night Economy Taxi Agent interface, including the 5x5 Grid-London map, scenario controls, and live step log.*
 
 ### 2.2 Assumptions
 - All moves between adjacent cells have a uniform distance.
@@ -98,7 +98,7 @@ The following metrics were captured during simulation runs:
 | S1: Normal Friday | BFS | 1 | 25 | 0 | YES |
 | S2: Heavy Closures | BFS | 1 | 19 | 6 | YES |
 | S3: Surge Night | A* | 3 | 43 | 42 | YES |
-| S4: MAS Fleet | A* | 4 | 30 | 23 | YES |
+| S4: MAS Fleet (5x5) | A* | 4 | 20 | 43 | YES |
 
 ![FIGURE 6 — Sequence Diagram: One Complete Trip (Scenario 1)](file:///Users/mqc/Desktop/AI%20COURSE%20WORK%20/assets/sequence_diagram.png)
 *Figure 5: Sequence Diagram illustrating the synchronous interactions between the TaxiAgent, GridWorld, search algorithms, and Passenger objects during a single trip.*
@@ -107,7 +107,7 @@ The following metrics were captured during simulation runs:
 - **Scenario 1 (Baseline):** The agent navigated from its start position to a hotspot pickup and then to a residential home zone. The total movement cost (25 moves) exactly cancelled out the revenue (+20) and surge bonus (+5), resulting in a break-even score of 0. This demonstrates basic rationality: the agent reached the goal via the shortest path but faced a long-distance trip.
 - **Scenario 2 (Constraints):** despite having double the road closures, the agent found a path. Interestingly, because the passenger spawned closer to the agent's start point in this specific random seed, the score was higher (+6) despite the obstacles. This highlights that environmental "luck" (stochasticity) impacts single-run performance.
 - **Scenario 3 (Productivity):** Using A* search, the agent completed a full 3-trip session. The high score of +42 proves that a rational agent can remain profitable even with delays.
-- **Scenario 4 (Fleet Efficiency):** In the Multi-Agent System (MAS) run, two taxis managed 4 passengers. While individual scores were lower due to the random spawn locations, the **parallel time** (maximum steps taken by any one agent) was reduced to just **30 steps**. This demonstrates that MAS coordination via centralized dispatch significantly improves response times and throughput in smart city logistics.
+- **Scenario 4 (Fleet Efficiency):** In the Multi-Agent System (MAS) run on the **5x5 grid**, two taxis managed 4 passengers. The **parallel time** (maximum steps taken by any one agent) was reduced to just **20 steps**, with a total fleet score of **43**. This demonstrates that MAS coordination via centralized dispatch significantly improves response times and throughput in smart city logistics, especially in high-density constrained environments.
 
 ## 7. Explainability: "Why did you choose that move?"
 Modern AI must be transparent. The agent includes an explainability module that logs justifications for its actions:
@@ -117,7 +117,7 @@ By providing these justifications, the agent fulfills the requirements for "Trus
 
 ## 8. Reflection on Rationality, Fairness, and Sustainability
 ### 8.1 Computational Rationality vs. Real-World Rationality
-In the 10x10 grid, the agent's rationality is absolute because the state space is small enough for BFS/A* to find the global optimum. However, in a real 1-million-node London street graph, the agent might need to use "bounded rationality"—satisficing with a "good enough" path to save on computation time (energy).
+In the **5x5 grid**, the agent's rationality is absolute because the state space is small enough for BFS/A* to find the global optimum. However, in a real 1-million-node London street graph, the agent might need to use "bounded rationality"—satisficing with a "good enough" path to save on computation time (energy).
 
 ### 8.2 Fairness and Inclusivity
 A significant risk in our utility function is the **Geographic Bias** created by surge bonuses. If the agent earns +5 in Soho but 0 in less affluent boroughs, a perfectly rational agent will "starve" the poorer areas of service. This mirrors real-world algorithmic discrimination observed in rideshare platforms [4]. To ensure **Inclusivity**, a more advanced model would remove the -2 drunk passenger penalty. Penalising the service of vulnerable (intoxicated) passengers is ethically questionable, as it might lead the AI to avoid those who most need a safe ride home.
