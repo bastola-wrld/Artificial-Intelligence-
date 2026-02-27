@@ -29,7 +29,7 @@ The grid contains four cell types:
 3. **Hotspot Zones (2):** Areas of high demand such as Soho, Shoreditch, Camden, and Brixton. Pickups here yield a "surge bonus".
 4. **Home Zones (3):** Residential drop-off points like Islington, Hackney, and Clapham.
 
-![FIGURE 1 — Wireframe: Night Economy Taxi Agent Interface](file:///Users/mqc/Desktop/AI%20COURSE%20WORK%20/assets/wireframe.png)
+![FIGURE 1 — Wireframe: Night Economy Taxi Agent Interface](assets/wireframe.png)
 *Figure 1: Wireframe depicting the structural layout of the Night Economy Taxi Agent interface, including the 5x5 Grid-London map, scenario controls, and live step log.*
 
 ### 2.2 Assumptions
@@ -51,10 +51,10 @@ The agent perceives the following data at each time step $t$:
 ### 3.2 Actions (Actuators)
 The agent can execute a finite set of actions $A = \{Move North, Move South, Move East, Move West, Pick Up, Drop Off\}$. Each movement action transitions the agent between grid coordinates, while pickup/dropoff actions change the agent's internal state (carrying passenger).
 
-![FIGURE 3 — Use Case Diagram: Night Economy Taxi Agent](file:///Users/mqc/Desktop/AI%20COURSE%20WORK%20/assets/use_case_diagram.png)
+![FIGURE 3 — Use Case Diagram: Night Economy Taxi Agent](assets/use_case_diagram.png)
 *Figure 2: Use Case Diagram illustrating the core interactions between the TaxiAgent actor and the System Boundary of the Grid-London environment.*
 
-![FIGURE 4 — Entity Relationship Diagram: Night Economy Taxi Agent](file:///Users/mqc/Desktop/AI%20COURSE%20WORK%20/assets/erd.png)
+![FIGURE 4 — Entity Relationship Diagram: Night Economy Taxi Agent](assets/erd.png)
 *Figure 3: Entity Relationship Diagram (ERD) showing the data architecture of the simulation, including relations between the TaxiAgent, GridWorld, Passengers, and logs.*
 
 ## 4. Performance Measure (Utility Function)
@@ -84,7 +84,7 @@ A* is an informed search using the evaluation function $f(n) = g(n) + h(n)$, whe
 - **Why it works well:** By using a heuristic, A* "guides" the search toward the goal, significantly reducing the number of nodes explored compared to BFS. In Grid-London, the Manhattan distance is an **admissible heuristic** (it never overestimates the distance), ensuring optimality.
 - **When it fails:** If the heuristic is poorly chosen or if the environment has complex "U-shaped" obstacles that mislead the heuristic, A* can still be slow, though it remains superior to BFS in most grid scenarios.
 
-![FIGURE 2 — Activity Diagram: TaxiAgent Decision Loop](file:///Users/mqc/Desktop/AI%20COURSE%20WORK%20/assets/activity_diagram.png)
+![FIGURE 2 — Activity Diagram: TaxiAgent Decision Loop](assets/activity_diagram.png)
 *Figure 4: Activity Diagram depicting the decision loop of the TaxiAgent, from initialization through passenger spawning and path planning to session completion.*
 
 ## 6. Evaluation and Results
@@ -100,7 +100,7 @@ The following metrics were captured during simulation runs:
 | S3: Surge Night | A* | 3 | 43 | 42 | YES |
 | S4: MAS Fleet (5x5) | A* | 4 | 20 | 43 | YES |
 
-![FIGURE 6 — Sequence Diagram: One Complete Trip (Scenario 1)](file:///Users/mqc/Desktop/AI%20COURSE%20WORK%20/assets/sequence_diagram.png)
+![FIGURE 6 — Sequence Diagram: One Complete Trip (Scenario 1)](assets/sequence_diagram.png)
 *Figure 5: Sequence Diagram illustrating the synchronous interactions between the TaxiAgent, GridWorld, search algorithms, and Passenger objects during a single trip.*
 
 ### 6.2 Analysis of Scenarios
